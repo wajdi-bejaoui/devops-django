@@ -117,8 +117,7 @@ pipeline {
 
     environment {
         // Store the kubeconfig file path as an environment variable
-
-        KUBECONFIG_PATH = '/tmp/kubeconfig'
+        KUBECONFIG_PATH = "${env.WORKSPACE}/kubeconfig" // Use the workspace path
     }
 
     stages {
@@ -140,11 +139,12 @@ pipeline {
         stage('Fetch Kubeconfig') {
             steps {
                 script {
-                    // Retrieve the kubeconfig file from Jenkins credentials
-                    sh 'mkdir -p /tmp'
-                    // Copy the kubeconfig file from Jenkins secret
+                    // Create a directory for the kubeconfig file in the workspace
+                    sh 'mkdir -p ${WORKSPACE}/.kube'
+
+                    // Use `withCredentials` to securely copy the kubeconfig file
                     withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG_FILE')]) {
-                        sh "cp ${KUBECONFIG_FILE} ${KUBECONFIG_PATH}"
+                        sh "cp ${KUBECONFIG_FILE} ${KUBECONFIG_PATH}" // Copy the kubeconfig securely
                     }
                 }
             }
@@ -153,7 +153,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 script {
-                    // Initialize Terraform
+                    // Initialize Terraform, ensuring you are in the correct directory
                     dir('terraform') {
                         sh 'terraform init -backend-config="path=${KUBECONFIG_PATH}"'
                     }
@@ -164,7 +164,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 script {
-                    // Apply the Terraform configuration
+                    // Apply the Terraform configuration, ensuring you are in the correct directory
                     dir('terraform') {
                         sh 'terraform apply -auto-approve -var="kubeconfig_path=${KUBECONFIG_PATH}"'
                     }
@@ -172,6 +172,8 @@ pipeline {
             }
         }
     }
+}
+
 
    
 }
