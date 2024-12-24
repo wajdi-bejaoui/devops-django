@@ -154,7 +154,9 @@ pipeline {
             steps {
                 script {
                     // Initialize Terraform
-                    sh 'terraform init -backend-config="path=/${KUBECONFIG_PATH}"'
+                    dir('terraform') {
+                        sh 'terraform init -backend-config="path=${KUBECONFIG_PATH}"'
+                    }
                 }
             }
         }
@@ -163,7 +165,9 @@ pipeline {
             steps {
                 script {
                     // Apply the Terraform configuration
-                    sh 'terraform apply -auto-approve -var="kubeconfig_path=${KUBECONFIG_PATH}"'
+                    dir('terraform') {
+                        sh 'terraform apply -auto-approve -var="kubeconfig_path=${KUBECONFIG_PATH}"'
+                    }
                 }
             }
         }
