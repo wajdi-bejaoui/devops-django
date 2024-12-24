@@ -3,6 +3,13 @@ provider "kubernetes" {
 
 }
 
+variable "kubeconfig_path" {
+  description = "${env.WORKSPACE}/kubeconfig"
+  type        = string
+}
+
+
+
 resource "kubernetes_manifest" "django_deployment" {
   manifest = {
     apiVersion = "apps/v1"
