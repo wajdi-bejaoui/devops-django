@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+  # namespace: django-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+      - name: django-app
+        image: wajdibejaoui/django_test:latest
+        # image : DOCKER_IMAGE:DOCKER_TAG # Placeholder for dynamic replacement
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DJANGO_SETTINGS_MODULE
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DJANGO_SETTINGS_MODULE
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DATABASE_HOST
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DATABASE_PORT
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_PASSWORD
+        volumeMounts:
+        - name: static-files
+          mountPath: /app/static
+      volumes:
+      - name: static-files
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-service
+  # namespace: django-app
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: django-app
+  type: NodePort

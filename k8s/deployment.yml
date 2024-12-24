@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+spec:
+  # replicas: 3 # Number of pod replicas
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+      - name: django-app
+        # image: DOCKER_IMAGE:DOCKER_TAG # Placeholder for dynamic replacement
+        image : wajdibejaoui/django-app
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi" # Reduced from 256Mi
+            cpu: "200m"     # Reduced from 250m
+        ports:
+        - containerPort: 8000
