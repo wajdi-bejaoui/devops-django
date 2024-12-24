@@ -117,7 +117,7 @@ pipeline {
 
     environment {
         // Store the kubeconfig file path as an environment variable
-        
+
         KUBECONFIG_PATH = '/tmp/kubeconfig'
     }
 
@@ -169,17 +169,5 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            // Cleanup or notifications (e.g., Slack, email)
-        }
-
-        success {
-            echo "Terraform deployment succeeded!"
-        }
-
-        failure {
-            echo "Terraform deployment failed!"
-        }
-    }
+   
 }
