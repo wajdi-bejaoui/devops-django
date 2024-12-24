@@ -130,8 +130,11 @@ pipeline {
         stage('Install Terraform') {
             steps {
                 script {
-                    // Ensure Terraform is installed
-                    sh 'terraform --version'
+                    sh '''
+                    curl -fsSL https://apt.releases.hashicorp.com/gpg | tee /etc/apt/trusted.gpg.d/hashicorp.asc
+                    apt-add-repository "deb https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+                    apt-get update && apt-get install -y terraform
+                    '''
                 }
             }
         }
@@ -141,6 +144,9 @@ pipeline {
                 script {
                     // Create a directory for the kubeconfig file in the workspace
                     sh 'mkdir -p ${WORKSPACE}/.kube'
+
+                    sh 'ls -ld /var/jenkins_home/workspace/Django_auth'
+
 
                     // Use `withCredentials` to securely copy the kubeconfig file
                     withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG_FILE')]) {
