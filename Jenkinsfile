@@ -130,11 +130,8 @@ pipeline {
         stage('Install Terraform') {
             steps {
                 script {
-                    sh '''
-                    curl -fsSL https://apt.releases.hashicorp.com/gpg | tee /etc/apt/trusted.gpg.d/hashicorp.asc
-                    apt-add-repository "deb https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-                    apt-get update && apt-get install -y terraform
-                    '''
+                    // Ensure Terraform is installed
+                    sh 'terraform --version'
                 }
             }
         }
