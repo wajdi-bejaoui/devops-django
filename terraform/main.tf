@@ -1,11 +1,6 @@
 provider "kubernetes" {
-  config_path = var.kubeconfig_path
+  config_path = "C:\\Users\\wajdi\\.kube\\config"
 
-}
-
-variable "kubeconfig_path" {
-  description = "${env.WORKSPACE}/kubeconfig"
-  type        = string
 }
 
 

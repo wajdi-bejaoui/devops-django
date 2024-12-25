@@ -1,45 +1,4 @@
-# # version: '3.9'
 
-# # This configuration defines two services:
-
-# # db: A MySQL container.
-# # web: The Django app container, which will build from the Dockerfile you created.
-
-# services:
-#   db:
-#     image: mysql:8.0
-#     container_name: mysql_db
-#     environment:
-#       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'  # Allows empty password for root user
-#       MYSQL_DATABASE: auth
-#     ports:
-#       - "3306:3306"
-#     networks:
-#       - django_network
-#     healthcheck:
-#       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-#       interval: 10s
-#       timeout: 10s
-#       retries: 3
-
-#   web:
-#     build: .
-#     image: wajdibejaoui/django-app:latest  # Replace with your Docker Hub username
-#     container_name: django_app
-#     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-#     volumes:
-#       - .:/app
-#     ports:
-#       - "8000:8000"
-#     depends_on:
-#       db: 
-#         condition: service_healthy  # Ensure 'db' passes the health check before 'web' starts
-#     networks:
-#       - django_network
-
-# networks:
-#   django_network:
-#     driver: bridge
 
 
 version: '3.8'
@@ -83,6 +42,5 @@ volumes:
 
 
 
-  #config_path = "C:\\Users\\wajdi\\.kube\\config"
 
 
