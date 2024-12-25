@@ -12,7 +12,6 @@ pipeline {
         MYSQL_ROOT_PASSWORD = 'test'
         DJANGO_SECRET_KEY = 'your-secret-key'
 
-         KUBECONFIG = credentials('kubeconfig-credential-id')
 
     }
 
